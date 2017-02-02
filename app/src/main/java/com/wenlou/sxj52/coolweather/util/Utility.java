@@ -2,9 +2,11 @@ package com.wenlou.sxj52.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.wenlou.sxj52.coolweather.db.City;
 import com.wenlou.sxj52.coolweather.db.County;
 import com.wenlou.sxj52.coolweather.db.Province;
+import com.wenlou.sxj52.coolweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,5 +91,17 @@ public class Utility {
             }
         }
         return false;
+    }
+    public static Weather handlerWeatherResponse(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

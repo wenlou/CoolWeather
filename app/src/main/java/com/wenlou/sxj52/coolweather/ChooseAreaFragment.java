@@ -2,6 +2,7 @@ package com.wenlou.sxj52.coolweather;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -82,6 +83,21 @@ public class ChooseAreaFragment extends Fragment{
                 }else if(currentLevel==LEVEL_CITY){
                     selectCity=mCityList.get(position);
                     queryCounties();
+                }
+                else if(currentLevel==LEVEL_COUNTY){
+                  String weatherId=mCountyList.get(position).getWeatherId();
+                    if(getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivty.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivty){
+                        WeatherActivty activty= (WeatherActivty) getActivity();
+                        activty.drawLayout.closeDrawers();
+                        activty.swipeRefresh.setRefreshing(true);
+                        activty.weatherId=weatherId;
+                        activty.requestWeather(weatherId);
+                    }
                 }
             }
         });
